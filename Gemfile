@@ -36,7 +36,7 @@ gem 'devise-jwt'
 gem 'jsonapi-serializer'
 
 # Paranoia to persist deleted data in the database
-gem 'paranoia', '~> 2.6.4'
+gem 'paranoia', '~> 3.0.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
