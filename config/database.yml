@@ -78,8 +78,12 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
-production:
-  <<: *default
-  database: to_do_production
-  username: <%= ENV["TO_DO_DATABASE_USERNAME"] %>
-  password: <%= ENV["TO_DO_DATABASE_PASSWORD"] %>
+production: 
+  <<: *default 
+  adapter: postgresql 
+  encoding: unicode 
+  database: to_do_production 
+  username: <%= ENV['TO_DO_DATABASE_USERNAME'] %> 
+  password: <%= ENV['TO_DO_DATABASE_PASSWORD'] %> 
+  host: postgres 
+  port: 5432

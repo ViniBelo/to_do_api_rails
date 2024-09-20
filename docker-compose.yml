@@ -4,19 +4,30 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: 6wyvbr64yb46r5bvyw4er65bywe46ry
-      POSTGRES_PASSWORD: vw45y6vt4ty5fwe456ywer4v5ywe5
+      POSTGRES_DB: to_do_production
+      POSTGRES_USER: ${TO_DO_DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${TO_DO_DATABASE_PASSWORD}
     ports:
       - 5432:5432
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TO_DO_DATABASE_USERNAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
   web:
+    depends_on:
+      - postgres
     build: 
       context: .
       dockerfile: Dockerfile
     environment:
-      TO_DO_DATABASE_USERNAME: 6wyvbr64yb46r5bvyw4er65bywe46ry
-      TO_DO_DATABASE_PASSWORD: vw45y6vt4ty5fwe456ywer4v5ywe5
+      TO_DO_DATABASE_USERNAME: ${TO_DO_DATABASE_USERNAME}
+      TO_DO_DATABASE_PASSWORD: ${TO_DO_DATABASE_PASSWORD}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
     volumes:
       - .:/myapp
     ports:
