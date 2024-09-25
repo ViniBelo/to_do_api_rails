@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_23_222446) do
     t.string "last_name"
     t.string "nickname"
     t.date "birthdate"
+    t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_user_details_on_user_id"

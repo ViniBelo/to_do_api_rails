@@ -2,8 +2,9 @@ Rails.application.routes.draw do
   scope "api" do
     scope "v1" do
       # Current User
-      scope "users" do
-        get "user_info", to: "users/users#user_info"
+      scope "user" do
+        resources :user_details, except: %i[ index create update destroy ]
+        put "/user_details" => "user_details#update"
       end
 
       # Users

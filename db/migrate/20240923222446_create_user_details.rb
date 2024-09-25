@@ -7,6 +7,7 @@ class CreateUserDetails < ActiveRecord::Migration[7.1]
       t.string :last_name
       t.string :nickname
       t.date :birthdate
+      t.datetime :deleted_at
 
       t.timestamps
     end
