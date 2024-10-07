@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
-  scope "api" do
-    scope "v1" do
+  scope :api do
+    scope :v1 do
       # Current User
-      scope "user" do
-        resources :user_details, except: %i[ index create update destroy ]
-        put "/user_details" => "user_details#update"
+      scope :user do
+        scope :user_details do
+          get "/" => "user_details#show"
+          patch "/" => "user_details#update"
+        end
       end
 
       # Users
