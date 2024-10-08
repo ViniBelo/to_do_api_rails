@@ -6,6 +6,7 @@ class CreateTasks < ActiveRecord::Migration[7.1]
       t.string :description
       t.datetime :start_date
       t.datetime :end_date
+      t.datetime :deleted_at
 
       t.timestamps
     end

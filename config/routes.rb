@@ -9,6 +9,12 @@ Rails.application.routes.draw do
         end
       end
 
+      # Contexts
+      resources :contexts, only: [ :index, :create ] do
+        # Tasks
+        resources :tasks, only: [ :index, :create ]
+      end
+
       # Users
       devise_for :users, path_names: {
         sign_in: "login",
