@@ -9,12 +9,12 @@ class TasksController < ApplicationController
 
   def create
     task_params = permit_params
-    Task.create(task_params)
+    Task.create!(task_params)
   end
 
   private
 
   def permit_params
-    params.permit(:context_id, :title, :description, :start_date, :end_date)
+    params.require(:task).permit(:context_id, :title, :description, :start_date, :end_date)
   end
 end

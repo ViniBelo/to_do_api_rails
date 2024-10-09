@@ -7,13 +7,13 @@ class ContextsController < ApplicationController
 
   def create
     context_params = permit_params
-    context = Context.create(user_id: current_user.id, **context_params)
+    context = Context.create!(user_id: current_user.id, **context_params)
     render json: context, status: :created
   end
 
   private
 
   def permit_params
-    params.permit(:title, :description)
+    params.require(:context).permit(:title, :description)
   end
 end
