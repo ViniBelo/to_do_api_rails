@@ -1,6 +1,6 @@
 class ContextsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_context, only: [ :show, :update ]
+  before_action :set_context, only: %i[ show update destroy ]
 
   def index
     render json: {
@@ -23,6 +23,11 @@ class ContextsController < ApplicationController
     render json: @context, status: :ok
   end
 
+  def destroy
+    return unprocessable_entity_response unless @context.delete
+    render json: { message: "Context deleted successfully" }, status: :no_content
+  end
+
   private
 
   def context_params
@@ -35,9 +40,7 @@ class ContextsController < ApplicationController
   end
 
   def not_found_response
-    render json: {
-      message: "Not found context with given id"
-    }, status: :not_found
+    render json: { message: "Not found context with given id" }, status: :not_found
   end
 
   def unprocessable_entity_response
