@@ -8,13 +8,14 @@ class ContextsController < ApplicationController
   end
 
   def create
-    context = Context.create!(user_id: current_user.id, **context_params)
+    context = Context.new(user_id: current_user.id, **context_params)
+    return unprocessable_entity_json(context) unless context.save
     render json: context, status: :created
   end
 
   def update
     context = Context.find_by(id: params[:id])
-    context.update!(context_params)
+    return unprocessable_entity_json(context) unless context.update(context_params)
     render json: context, status: :ok
   end
 
@@ -22,5 +23,9 @@ class ContextsController < ApplicationController
 
   def context_params
     params.require(:context).permit(:title, :description)
+  end
+
+  def unprocessable_entity_json(context)
+    render json: context, status: :unprocessable_entity_json
   end
 end
