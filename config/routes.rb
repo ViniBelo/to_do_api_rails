@@ -10,9 +10,9 @@ Rails.application.routes.draw do
       end
 
       # Contexts
-      resources :contexts, only: [ :index, :create ] do
+      resources :contexts, only: %i[ index create update ] do
         # Tasks
-        resources :tasks, only: [ :index, :create ]
+        resources :tasks, only: %i[ index create ]
       end
 
       # Users
