@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       end
 
       # Contexts
-      resources :contexts, only: %i[ index create update ] do
+      resources :contexts, only: %i[ index show create update ] do
         # Tasks
         resources :tasks, only: %i[ index create ]
       end

@@ -1,5 +1,6 @@
 class ContextsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_context, only: [ :show, :update ]
 
   def index
     render json: {
@@ -7,16 +8,19 @@ class ContextsController < ApplicationController
     }, status: :ok
   end
 
+  def show
+    render json: @context, status: :ok
+  end
+
   def create
-    context = Context.new(user_id: current_user.id, **context_params)
-    return unprocessable_entity_json(context) unless context.save
-    render json: context, status: :created
+    @context = Context.new(user_id: current_user.id, **context_params)
+    return unprocessable_entity_response unless @context.save
+    render json: @context, status: :created
   end
 
   def update
-    context = Context.find_by(id: params[:id])
-    return unprocessable_entity_json(context) unless context.update(context_params)
-    render json: context, status: :ok
+    return unprocessable_entity_response unless @context.update(context_params)
+    render json: @context, status: :ok
   end
 
   private
@@ -25,7 +29,18 @@ class ContextsController < ApplicationController
     params.require(:context).permit(:title, :description)
   end
 
-  def unprocessable_entity_json(context)
-    render json: context, status: :unprocessable_entity_json
+  def set_context
+    @context = Context.find_by(id: params[:id])
+    not_found_response if @context.blank?
+  end
+
+  def not_found_response
+    render json: {
+      message: "Not found context with given id"
+    }, status: :not_found
+  end
+
+  def unprocessable_entity_response
+    render json: @context, status: :unprocessable_entity
   end
 end
