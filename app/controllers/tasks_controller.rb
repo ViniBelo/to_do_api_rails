@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_task, only: %i[show destroy]
+  before_action :set_task, only: %i[show update destroy]
 
   def index
     render json: {
@@ -16,6 +16,11 @@ class TasksController < ApplicationController
     @task = Task.new(context_id: params[:context_id], **task_params)
     return render unprocessable_entity_response unless @task.save!
     render json: @task, status: :created
+  end
+
+  def update
+    return unprocessable_entity_response unless @task.update!(task_params)
+    render json: @task, status: :ok
   end
 
   def destroy
