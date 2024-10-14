@@ -8,13 +8,18 @@ class TasksController < ApplicationController
   end
 
   def create
-    task_params = permit_params
-    Task.create!(task_params)
+    @task = Task.new(context_id: params[:context_id], **permit_params)
+    return render unprocessable_entity_response unless @task.save!
+    render json: @task, status: :created
   end
 
   private
 
   def permit_params
-    params.require(:task).permit(:context_id, :title, :description, :start_date, :end_date)
+    params.require(:task).permit(:title, :description, :start_date, :end_date)
+  end
+
+  def unprocessable_entity_response
+    render json: @task, status: :unprocessable_entity
   end
 end

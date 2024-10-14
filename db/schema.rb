@@ -110,7 +110,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_27_010532) do
   add_foreign_key "categories", "contexts"
   add_foreign_key "contexts", "users"
   add_foreign_key "progresses", "contexts"
-  add_foreign_key "tasks", "contexts"
+  add_foreign_key "tasks", "contexts", on_delete: :cascade
   add_foreign_key "tasks_categories", "categories", column: "categories_id"
   add_foreign_key "tasks_categories", "tasks", column: "tasks_id"
   add_foreign_key "tasks_progresses", "progresses"

@@ -1,7 +1,7 @@
 class CreateTasks < ActiveRecord::Migration[7.1]
   def change
     create_table :tasks, id: :uuid do |t|
-      t.references :context, type: :uuid, null: false, foreign_key: true
+      t.references :context, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
       t.string :title
       t.string :description
       t.datetime :start_date
