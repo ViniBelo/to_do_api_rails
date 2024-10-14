@@ -1,11 +1,15 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_task, only: %i[destroy]
+  before_action :set_task, only: %i[show destroy]
 
   def index
     render json: {
       tasks: Task.where(context_id: params[:context_id])
     }, status: :ok
+  end
+
+  def show
+    render json: @task, status: :ok
   end
 
   def create
