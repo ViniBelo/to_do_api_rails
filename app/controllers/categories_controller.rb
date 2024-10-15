@@ -1,6 +1,15 @@
 class CategoriesController < ApplicationController
   before_action :authenticate_user!
 
+  def index
+    render json: {
+      method: "#{controller_name}##{action_name}",
+      categories: Category.where(context_id: params[:context_id]).map do |category|
+        serialize_category(category)
+      end
+    }, status: :ok
+  end
+
   def create
     @category = Category.new(context_id: params[:context_id], **category_params)
     return unprocessable_entity_response unless @category.save!

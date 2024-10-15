@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       # Contexts
       resources :contexts, only: %i[ index show create update destroy ] do
         # Categories
-        resources :categories, only: %i[ create ]
+        resources :categories, only: %i[ index create ]
         # Tasks
         resources :tasks, only: %i[ index show create update destroy ]
       end
