@@ -24,7 +24,7 @@ class ContextsController < ApplicationController
   end
 
   def destroy
-    return unprocessable_entity_response unless @context.delete
+    return unprocessable_entity_response unless @context.destroy!
     render json: { message: "Context deleted successfully" }, status: :no_content
   end
 
