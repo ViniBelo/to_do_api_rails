@@ -4,23 +4,34 @@ class TasksController < ApplicationController
 
   def index
     render json: {
-      tasks: Task.where(context_id: params[:context_id])
+      tasks: Task.where(context_id: params[:context_id]).map do |task|
+        serialize_task(task)
+      end
     }, status: :ok
   end
 
   def show
-    render json: @task, status: :ok
+    render json: {
+        method: "#{controller_name}##{action_name}",
+        task: serialize_task(@task)
+      }, status: :ok
   end
 
   def create
     @task = Task.new(context_id: params[:context_id], **task_params)
     return render unprocessable_entity_response unless @task.save!
-    render json: @task, status: :created
+    render json: {
+        method: "#{controller_name}##{action_name}",
+        task: serialize_task(@task)
+      }, status: :created
   end
 
   def update
     return unprocessable_entity_response unless @task.update!(task_params)
-    render json: @task, status: :ok
+    render json: {
+        method: "#{controller_name}##{action_name}",
+        task: serialize_task(@task)
+      }, status: :ok
   end
 
   def destroy
@@ -32,6 +43,10 @@ class TasksController < ApplicationController
 
   def task_params
     params.require(:task).permit(:title, :description, :start_date, :end_date)
+  end
+
+  def serialize_task(task)
+    TaskSerializer.new(task).serializable_hash[:data][:attributes]
   end
 
   def set_task
