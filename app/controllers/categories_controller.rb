@@ -1,6 +1,6 @@
 class CategoriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_category, only: %i[show update]
+  before_action :set_category, only: %i[show update destroy]
 
   def index
     render json: {
@@ -33,6 +33,14 @@ class CategoriesController < ApplicationController
       method: "#{controller_name}##{action_name}",
       category: serialize_category(@category)
     }, status: :ok
+  end
+
+  def destroy
+    return unprocessable_entity_response unless @category.destroy!
+    render json: {
+      method: "#{controller_name}##{action_name}",
+      message: "Category deleted successfully"
+    }, status: :no_content
   end
 
   private
