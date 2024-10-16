@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   after_create :create_user_details
-  has_one :user_details
+  has_one :user_details, dependent: :destroy
 
   include Devise::JWT::RevocationStrategies::JTIMatcher
 
