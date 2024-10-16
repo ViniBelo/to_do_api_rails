@@ -107,13 +107,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_27_010532) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "categories", "contexts"
-  add_foreign_key "contexts", "users"
-  add_foreign_key "progresses", "contexts"
+  add_foreign_key "categories", "contexts", on_delete: :cascade
+  add_foreign_key "contexts", "users", on_delete: :cascade
+  add_foreign_key "progresses", "contexts", on_delete: :cascade
   add_foreign_key "tasks", "contexts", on_delete: :cascade
-  add_foreign_key "tasks_categories", "categories", column: "categories_id"
-  add_foreign_key "tasks_categories", "tasks", column: "tasks_id"
-  add_foreign_key "tasks_progresses", "progresses"
-  add_foreign_key "tasks_progresses", "tasks", column: "tasks_id"
-  add_foreign_key "user_details", "users"
+  add_foreign_key "tasks_categories", "categories", column: "categories_id", on_delete: :cascade
+  add_foreign_key "tasks_categories", "tasks", column: "tasks_id", on_delete: :cascade
+  add_foreign_key "tasks_progresses", "progresses", on_delete: :cascade
+  add_foreign_key "tasks_progresses", "tasks", column: "tasks_id", on_delete: :cascade
+  add_foreign_key "user_details", "users", on_delete: :cascade
 end
