@@ -1,5 +1,6 @@
 class CategoriesController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_category, only: %i[show]
 
   def index
     render json: {
@@ -7,6 +8,13 @@ class CategoriesController < ApplicationController
       categories: Category.where(context_id: params[:context_id]).map do |category|
         serialize_category(category)
       end
+    }, status: :ok
+  end
+
+  def show
+    render json: {
+      method: "#{controller_name}##{action_name}",
+      category: serialize_category(@category)
     }, status: :ok
   end
 
@@ -27,6 +35,18 @@ class CategoriesController < ApplicationController
 
   def serialize_category(category)
     CategorySerializer.new(category).serializable_hash[:data][:attributes]
+  end
+
+  def set_category
+    @category = Category.find_by(id: params[:id], context_id: params[:context_id])
+    not_found_response if @category.blank?
+  end
+
+  def not_found_response
+    render json: {
+      method: "#{controller_name}##{action_name}",
+      message: "Not found category with given id"
+    }, status: :not_found
   end
 
   def unprocessable_entity_response
