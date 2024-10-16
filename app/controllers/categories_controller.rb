@@ -1,6 +1,6 @@
 class CategoriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_category, only: %i[show]
+  before_action :set_category, only: %i[show update]
 
   def index
     render json: {
@@ -24,7 +24,15 @@ class CategoriesController < ApplicationController
     render json: {
       method: "#{controller_name}##{action_name}",
       category: serialize_category(@category)
-    }
+    }, status: :created
+  end
+
+  def update
+    return unprocessable_entity_response unless @category.update!(category_params)
+    render json: {
+      method: "#{controller_name}##{action_name}",
+      category: serialize_category(@category)
+    }, status: :ok
   end
 
   private
