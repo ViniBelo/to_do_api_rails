@@ -19,7 +19,7 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(context_id: params[:context_id], **task_params)
-    return render unprocessable_entity_response unless @task.save!
+    return unprocessable_entity_response unless @task.save!
     render json: {
         method: "#{controller_name}##{action_name}",
         task: serialize_task(@task)
