@@ -44,7 +44,7 @@ group :development, :test do
   # Enable the RubyLSP
   gem "ruby-lsp", require: false
 
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "debug", platforms: %i[ mri ], require: "debug/prelude"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
