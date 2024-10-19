@@ -16,7 +16,8 @@ Rails.application.routes.draw do
         # Progresses
         resources :progresses, only: %i[ index show create update destroy ]
         # Tasks
-        resources :tasks, only: %i[ index show create update destroy ]
+        resources :tasks, only: %i[index show create update destroy]
+        patch "tasks/:id/categories", to: "tasks#set_categories", as: :task_categories
       end
 
       # Users

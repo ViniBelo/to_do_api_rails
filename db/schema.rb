@@ -46,6 +46,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_27_010532) do
     t.index ["context_id"], name: "index_progresses_on_context_id"
   end
 
+  create_table "task_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "task_id", null: false
+    t.uuid "category_id", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_task_categories_on_category_id"
+    t.index ["task_id"], name: "index_task_categories_on_task_id"
+  end
+
+  create_table "task_progresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "task_id", null: false
+    t.uuid "progress_id", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["progress_id"], name: "index_task_progresses_on_progress_id"
+    t.index ["task_id"], name: "index_task_progresses_on_task_id"
+  end
+
   create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "context_id", null: false
     t.string "title"
@@ -56,26 +76,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_27_010532) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["context_id"], name: "index_tasks_on_context_id"
-  end
-
-  create_table "tasks_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "tasks_id", null: false
-    t.uuid "categories_id", null: false
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["categories_id"], name: "index_tasks_categories_on_categories_id"
-    t.index ["tasks_id"], name: "index_tasks_categories_on_tasks_id"
-  end
-
-  create_table "tasks_progresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "tasks_id", null: false
-    t.uuid "progress_id", null: false
-    t.datetime "deleted_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["progress_id"], name: "index_tasks_progresses_on_progress_id"
-    t.index ["tasks_id"], name: "index_tasks_progresses_on_tasks_id"
   end
 
   create_table "user_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -110,10 +110,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_27_010532) do
   add_foreign_key "categories", "contexts", on_delete: :cascade
   add_foreign_key "contexts", "users", on_delete: :cascade
   add_foreign_key "progresses", "contexts", on_delete: :cascade
+  add_foreign_key "task_categories", "categories", on_delete: :cascade
+  add_foreign_key "task_categories", "tasks", on_delete: :cascade
+  add_foreign_key "task_progresses", "progresses", on_delete: :cascade
+  add_foreign_key "task_progresses", "tasks", on_delete: :cascade
   add_foreign_key "tasks", "contexts", on_delete: :cascade
-  add_foreign_key "tasks_categories", "categories", column: "categories_id", on_delete: :cascade
-  add_foreign_key "tasks_categories", "tasks", column: "tasks_id", on_delete: :cascade
-  add_foreign_key "tasks_progresses", "progresses", on_delete: :cascade
-  add_foreign_key "tasks_progresses", "tasks", column: "tasks_id", on_delete: :cascade
   add_foreign_key "user_details", "users", on_delete: :cascade
 end
