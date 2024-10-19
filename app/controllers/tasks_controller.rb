@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_task, only: %i[show update destroy]
+  before_action :set_task, only: %i[show update destroy set_categories]
 
   def index
     render json: {
@@ -39,10 +39,32 @@ class TasksController < ApplicationController
     render json: { message: "Task deleted successfully" }, status: :no_content
   end
 
+  def set_categories
+    category_ids = Category.where(id: categories_params[:category_ids]).map(&:id)
+    if category_ids.blank?
+      return render json: {
+        method: "#{controller_name}##{action_name}",
+        message: "Category not found"
+      }, status: :not_found
+    end
+    return unprocessable_entity_response unless category_ids.length == categories_params[:category_ids].length
+    category_ids.each do |category_id|
+      TaskCategory.create!(task_id: @task.id, category_id:)
+    end
+    render json: {
+      method: "#{controller_name}##{action_name}",
+      task: serialize_task(@task)
+    }, status: :ok
+  end
+
   private
 
   def task_params
     params.require(:task).permit(:title, :description, :start_date, :end_date)
+  end
+
+  def categories_params
+    params.permit(category_ids: [])
   end
 
   def serialize_task(task)
