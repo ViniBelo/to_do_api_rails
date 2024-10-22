@@ -47,10 +47,6 @@ class ProgressesController < ApplicationController
     params.require(:progress).permit(:name, :color)
   end
 
-  def serialize_progress(progress)
-    ProgressSerializer.new(progress).serializable_hash[:data][:attributes]
-  end
-
   def set_progress
     @progress = Progress.find_by(id: params[:id], context_id: params[:context_id])
     not_found_response if @progress.blank?
