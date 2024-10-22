@@ -1,12 +1,13 @@
 {
     "version": "0.2.0",
     "configurations": [
-      // Launch the debugger for any given program. In this case, it will run the current file using Ruby
         {
-            "type": "ruby_lsp",
-            "name": "Debug",
+            "type": "rdbg",
+            "name": "Debug Rails development",
             "request": "launch",
-            "program": "ruby ${file}"
+            "script": "./bin/rails s -p 4000",
+            "useBundler": false,
+            "command": "ruby"
         },
         // Launch the debugger for the current test file
         {

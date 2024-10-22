@@ -4,16 +4,14 @@ class TasksController < ApplicationController
 
   def index
     render json: {
-      tasks: Task.where(context_id: params[:context_id]).map do |task|
-        serialize_task(task)
-      end
+      tasks: Task.where(context_id: params[:context_id]).map(&:to_json)
     }, status: :ok
   end
 
   def show
     render json: {
         method: "#{controller_name}##{action_name}",
-        task: serialize_task(@task)
+        task: @task.to_json
       }, status: :ok
   end
 
@@ -22,7 +20,7 @@ class TasksController < ApplicationController
     return unprocessable_entity_response unless @task.save!
     render json: {
         method: "#{controller_name}##{action_name}",
-        task: serialize_task(@task)
+        task: @task.to_json
       }, status: :created
   end
 
@@ -30,7 +28,7 @@ class TasksController < ApplicationController
     return unprocessable_entity_response unless @task.update!(task_params)
     render json: {
         method: "#{controller_name}##{action_name}",
-        task: serialize_task(@task)
+        task: @task.to_json
       }, status: :ok
   end
 
@@ -53,22 +51,18 @@ class TasksController < ApplicationController
     end
     render json: {
       method: "#{controller_name}##{action_name}",
-      task: serialize_task(@task)
+      task: @task.to_json
     }, status: :ok
   end
 
   private
 
   def task_params
-    params.require(:task).permit(:title, :description, :start_date, :end_date)
+    params.require(:task).permit(:title, :description, :start_date, :end_date, :progress_id)
   end
 
   def categories_params
     params.permit(category_ids: [])
-  end
-
-  def serialize_task(task)
-    TaskSerializer.new(task).serializable_hash[:data][:attributes]
   end
 
   def set_task
