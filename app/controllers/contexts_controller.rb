@@ -5,16 +5,14 @@ class ContextsController < ApplicationController
   def index
     render json: {
       method: "#{controller_name}##{action_name}",
-      contexts: Context.where(user_id: current_user.id).map do |context|
-        serialize_context(context)
-      end
+      contexts: Context.where(user_id: current_user.id).map(&:to_json)
     }, status: :ok
   end
 
   def show
     render json: {
       method: "#{controller_name}##{action_name}",
-      context: serialize_context(@context)
+      context: @context.to_json
     }, status: :ok
   end
 
@@ -23,7 +21,7 @@ class ContextsController < ApplicationController
     return unprocessable_entity_response unless @context.save
     render json: {
       method: "#{controller_name}##{action_name}",
-      context: serialize_context(@context)
+      context: @context.to_json
     }, status: :created
   end
 
@@ -31,7 +29,7 @@ class ContextsController < ApplicationController
     return unprocessable_entity_response unless @context.update(context_params)
     render json: {
       method: "#{controller_name}##{action_name}",
-      context: serialize_context(@context)
+      context: @context.to_json
     }, status: :ok
   end
 
@@ -47,10 +45,6 @@ class ContextsController < ApplicationController
 
   def context_params
     params.require(:context).permit(:title, :description)
-  end
-
-  def serialize_context(context)
-    ContextSerializer.new(context).serializable_hash[:data][:attributes]
   end
 
   def set_context

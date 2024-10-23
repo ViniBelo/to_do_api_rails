@@ -5,16 +5,14 @@ class ProgressesController < ApplicationController
   def index
     render json: {
       method: "#{controller_name}##{action_name}",
-      progresses: Progress.where(context_id: params[:context_id]).map do |progress|
-        serialize_progress(progress)
-      end
+      progresses: Progress.where(context_id: params[:context_id]).map(&:to_json)
     }, status: :ok
   end
 
   def show
     render json: {
       method: "#{controller_name}##{action_name}",
-      progress: serialize_progress(@progress)
+      progress: @progress.to_json
     }, status: :ok
   end
 
@@ -23,7 +21,7 @@ class ProgressesController < ApplicationController
     return unprocessable_entity_response unless @progress.save!
     render json: {
       method: "#{controller_name}##{action_name}",
-      progress: serialize_progress(@progress)
+      progress: @progress.to_json
     }, status: :created
   end
 
@@ -31,7 +29,7 @@ class ProgressesController < ApplicationController
     return unprocessable_entity_response unless @progress.update!(progress_params)
     render json: {
       method: "#{controller_name}##{action_name}",
-      progress: serialize_progress(@progress)
+      progress: @progress.to_json
     }, status: :ok
   end
 
@@ -47,10 +45,6 @@ class ProgressesController < ApplicationController
 
   def progress_params
     params.require(:progress).permit(:name, :color)
-  end
-
-  def serialize_progress(progress)
-    ProgressSerializer.new(progress).serializable_hash[:data][:attributes]
   end
 
   def set_progress
