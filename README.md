@@ -1,24 +1,14 @@
-# README
+# To do application
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is my first Rails project, which I decided to do for learning about the language and framework.
+It consists on a simple todo application, that helps you to organize yourself.
 
-Things you may want to cover:
+Technical information:
 
-* Ruby version
+* Ruby version: 3.3.4
 
-* System dependencies
+* Rails version: 7.1.4.1
 
-* Configuration
+* Puma version: 6.4.3
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Database: PostgreSQL
