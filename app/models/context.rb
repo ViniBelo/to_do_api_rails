@@ -8,7 +8,9 @@ class Context < ApplicationRecord
     {
       id:,
       title:,
-      description:
+      description:,
+      categories: categories.map(&:to_json),
+      progresses: progresses.map(&:to_json)
     }
   end
 end
