@@ -5,7 +5,13 @@ class ContextsController < ApplicationController
   def index
     render json: {
       method: "#{controller_name}##{action_name}",
-      contexts: Context.where(user_id: current_user.id).map(&:to_json)
+      contexts: Context.where(user_id: current_user.id).map do |context|
+        {
+          id: context.id,
+          title: context.title,
+          description: context.description
+        }
+      end
     }, status: :ok
   end
 
